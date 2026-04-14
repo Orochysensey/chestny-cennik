@@ -20,7 +20,6 @@ jobs:
         sudo apt install -y openjdk-17-jdk wget unzip zip
     - name: Setup Android SDK
       run: |
-        # Устанавливаем SDK вручную
         mkdir -p $HOME/android-sdk
         cd $HOME/android-sdk
         wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
@@ -38,7 +37,6 @@ jobs:
         ANDROID_HOME: $HOME/android-sdk
         ANDROID_SDK_ROOT: $HOME/android-sdk
       run: |
-        # Создаём временный buildozer.spec с правильными путями
         cat > buildozer.spec << 'EOF'
 [app]
 title = Честный ценник
