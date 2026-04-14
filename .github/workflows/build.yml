@@ -21,16 +21,8 @@ jobs:
         pip install buildozer cython
     - name: Build APK
       run: |
-        # Создаём expect-скрипт для автоматического ответа
-        cat > auto_build.exp << 'EOF'
-        spawn buildozer android debug
-        expect "Are you sure you want to continue [y/n]?"
-        send "y\r"
-        expect eof
-        EOF
-        chmod +x auto_build.exp
-        sudo apt install -y expect
-        ./auto_build.exp
+        # Автоматический ответ через printf
+        printf 'y\n' | buildozer android debug
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
