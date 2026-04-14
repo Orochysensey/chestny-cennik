@@ -19,12 +19,23 @@ jobs:
         sudo apt update
         sudo apt install -y openjdk-17-jdk
         pip install buildozer cython
-    - name: Build APK
+    - name: Build APK with full log
       run: |
-        # Автоматический ответ через printf
-        printf 'y\n' | buildozer android debug
+        # Запускаем buildozer и сохраняем полный лог
+        echo "y" | buildozer android debug 2>&1 | tee full_build.log
+    - name: Show error if failed
+      if: failure()
+      run: |
+        echo "=== LAST 100 LINES OF BUILD LOG ==="
+        tail -100 full_build.log
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: honestprice
         path: bin/*.apk
+    - name: Upload build log
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-log
+        path: full_build.log
