@@ -1,6 +1,6 @@
 """
 Честный ценник - приложение для расчёта реальной цены за 1 кг или 1 литр
-Исправлено: заголовок не обрезается на телефоне
+Заголовок полностью виден на любом экране
 """
 
 from kivy.app import App
@@ -31,7 +31,7 @@ class CheatPriceApp(App):
         # ГЛАВНЫЙ КОНТЕЙНЕР (НЕ СКРОЛЛИТСЯ)
         main_layout = BoxLayout(
             orientation='vertical',
-            padding=[dp(16), dp(12), dp(16), dp(12)],
+            padding=[dp(16), dp(16), dp(16), dp(16)],  # Увеличен верхний отступ
             spacing=dp(8)
         )
 
@@ -39,12 +39,12 @@ class CheatPriceApp(App):
         self.load_background(main_layout)
 
         # ===== ВЕРХНЯЯ ЗАКРЕПЛЁННАЯ ЧАСТЬ =====
-        # Заголовок (увеличена высота, чтобы не обрезался)
+        # Заголовок (ещё больше увеличил высоту)
         title = Label(
             text='ЧЕСТНЫЙ ЦЕННИК',
-            font_size='36sp',  # Чуть уменьшил для телефона
+            font_size='34sp',
             size_hint=(1, None),
-            height=dp(60),     # Увеличена высота
+            height=dp(75),     # Ещё больше высоты
             color=(0.1, 0.55, 0.1, 1),
             bold=True,
             halign='center',
@@ -53,12 +53,12 @@ class CheatPriceApp(App):
         title.bind(size=title.setter('text_size'))
         main_layout.add_widget(title)
 
-        # Подзаголовок (увеличена высота)
+        # Подзаголовок (тоже увеличил)
         subtitle = Label(
             text='Узнай реальную цену за 1 кг или 1 литр',
-            font_size='14sp',  # Чуть уменьшил
+            font_size='14sp',
             size_hint=(1, None),
-            height=dp(32),     # Увеличена высота
+            height=dp(38),
             color=(1, 0.5, 0, 1),
             bold=True,
             halign='center',
@@ -68,7 +68,7 @@ class CheatPriceApp(App):
         main_layout.add_widget(subtitle)
 
         # Отступ
-        main_layout.add_widget(Widget(size_hint_y=None, height=dp(5)))
+        main_layout.add_widget(Widget(size_hint_y=None, height=dp(8)))
 
         # --- Поле: Продукт / бренд ---
         product_label = Label(
@@ -170,7 +170,7 @@ class CheatPriceApp(App):
         main_layout.add_widget(price_input_wrapper)
 
         # Отступ перед кнопкой
-        main_layout.add_widget(Widget(size_hint_y=None, height=dp(5)))
+        main_layout.add_widget(Widget(size_hint_y=None, height=dp(8)))
 
         # Контейнер для кнопки с контуром
         button_container = BoxLayout(orientation='horizontal', size_hint=(1, None), height=dp(52))
@@ -198,7 +198,7 @@ class CheatPriceApp(App):
         main_layout.add_widget(button_container)
 
         # Отступ перед историей
-        main_layout.add_widget(Widget(size_hint_y=None, height=dp(8)))
+        main_layout.add_widget(Widget(size_hint_y=None, height=dp(10)))
 
         # Заголовок истории
         history_title = Label(
@@ -251,7 +251,7 @@ class CheatPriceApp(App):
         if hasattr(instance, 'outline'):
             instance.canvas.after.remove(instance.outline)
         with instance.canvas.after:
-            Color(1, 0.5, 0, 1)  # Оранжевый
+            Color(1, 0.5, 0, 1)
             instance.outline = Line(rectangle=(instance.x, instance.y, instance.width, instance.height), width=2)
 
     def _update_results_bg(self, instance, value):
