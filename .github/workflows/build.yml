@@ -10,32 +10,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.9'
-    - name: Install buildozer
+
+    # КЛЮЧЕВОЙ ШАГ: устанавливаем совместимые версии autotools
+    - name: Fix autotools versions for libffi
       run: |
         sudo apt update
+        sudo apt install -y autoconf-archive
+        sudo apt install -y autoconf=2.69-11.1 automake=1:1.16.3-2 libtool=2.4.6-15
+
+    - name: Install buildozer
+      run: |
         sudo apt install -y openjdk-17-jdk
         pip install buildozer cython
-    - name: Build APK with full log
+
+    - name: Build APK
       run: |
-        # Запускаем buildozer и сохраняем полный лог
-        echo "y" | buildozer android debug 2>&1 | tee full_build.log
-    - name: Show error if failed
-      if: failure()
-      run: |
-        echo "=== LAST 100 LINES OF BUILD LOG ==="
-        tail -100 full_build.log
+        echo "y" | buildozer android debug
+
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: honestprice
         path: bin/*.apk
-    - name: Upload build log
-      if: failure()
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-log
-        path: full_build.log
