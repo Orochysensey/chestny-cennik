@@ -1,6 +1,6 @@
 """
 Честный ценник - приложение для расчёта реальной цены за 1 кг или 1 литр
-Во всех полях ввода есть подсказка "Например:"
+Исправлено: заголовок не обрезается на телефоне
 """
 
 from kivy.app import App
@@ -9,7 +9,7 @@ from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
-from kivy.uix.widget import Widget  # <-- ДОБАВЛЕНО!
+from kivy.uix.widget import Widget
 from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle, Line
 from kivy.utils import platform
@@ -32,19 +32,19 @@ class CheatPriceApp(App):
         main_layout = BoxLayout(
             orientation='vertical',
             padding=[dp(16), dp(12), dp(16), dp(12)],
-            spacing=dp(6)
+            spacing=dp(8)
         )
 
         # Загружаем фоновое изображение
         self.load_background(main_layout)
 
         # ===== ВЕРХНЯЯ ЗАКРЕПЛЁННАЯ ЧАСТЬ =====
-        # Заголовок
+        # Заголовок (увеличена высота, чтобы не обрезался)
         title = Label(
             text='ЧЕСТНЫЙ ЦЕННИК',
-            font_size='42sp',
+            font_size='36sp',  # Чуть уменьшил для телефона
             size_hint=(1, None),
-            height=dp(55),
+            height=dp(60),     # Увеличена высота
             color=(0.1, 0.55, 0.1, 1),
             bold=True,
             halign='center',
@@ -53,12 +53,12 @@ class CheatPriceApp(App):
         title.bind(size=title.setter('text_size'))
         main_layout.add_widget(title)
 
-        # Подзаголовок
+        # Подзаголовок (увеличена высота)
         subtitle = Label(
             text='Узнай реальную цену за 1 кг или 1 литр',
-            font_size='15sp',
+            font_size='14sp',  # Чуть уменьшил
             size_hint=(1, None),
-            height=dp(28),
+            height=dp(32),     # Увеличена высота
             color=(1, 0.5, 0, 1),
             bold=True,
             halign='center',
@@ -186,7 +186,7 @@ class CheatPriceApp(App):
             background_normal='',
             font_size='16sp',
             bold=True,
-            color=(1, 1, 1, 1)  # Белый текст
+            color=(1, 1, 1, 1)
         )
         self.calc_button.bind(on_press=self.calculate)
 
@@ -203,7 +203,7 @@ class CheatPriceApp(App):
         # Заголовок истории
         history_title = Label(
             text='ПОСЛЕДНИЕ РАСЧЁТЫ',
-            font_size='15sp',
+            font_size='14sp',
             size_hint=(1, None),
             height=dp(28),
             color=(0.1, 0.3, 0.7, 1),
@@ -300,10 +300,7 @@ class CheatPriceApp(App):
 
     def update_results_display(self):
         """Обновляет отображение окна с результатами"""
-        # Очищаем контейнер, но сохраняем верхнюю распорку
         self.results_container.clear_widgets()
-
-        # Возвращаем распорку
         self.results_container.add_widget(self.top_spacer)
 
         if not self.results_history:
@@ -395,7 +392,6 @@ class CheatPriceApp(App):
             true_price = price / velichina * 1000
             self.add_result_to_history(product_name, velichina, price, true_price)
 
-            # Очищаем все поля
             self.product_input.text = ''
             self.velichina_input.text = ''
             self.price_input.text = ''
@@ -403,8 +399,6 @@ class CheatPriceApp(App):
         except ValueError:
             pass
 
-
-from kivy.uix.widget import Widget
 
 if __name__ == '__main__':
     CheatPriceApp().run()
