@@ -14,47 +14,13 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.9'
-    - name: Install dependencies
+    - name: Install buildozer
       run: |
         sudo apt update
-        sudo apt install -y openjdk-17-jdk wget unzip zip
+        sudo apt install -y openjdk-17-jdk
         pip install buildozer cython
-    - name: Setup Android SDK
-      run: |
-        mkdir -p $HOME/android-sdk
-        cd $HOME/android-sdk
-        wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-        unzip -q commandlinetools-linux-11076708_latest.zip
-        mkdir -p cmdline-tools
-        mv latest cmdline-tools/ 2>/dev/null || true
-        echo y | cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null 2>&1
-        cmdline-tools/latest/bin/sdkmanager "platforms;android-30" "build-tools;30.0.3" "ndk;25.1.8937393" > /dev/null 2>&1
     - name: Build APK
-      env:
-        ANDROID_HOME: $HOME/android-sdk
-        ANDROID_SDK_ROOT: $HOME/android-sdk
       run: |
-        echo '[app]
-title = Честный ценник
-package.name = honestprice
-package.domain = org.example
-source.dir = .
-source.include_exts = py,png
-version = 1.0.0
-requirements = python3,kivy
-orientation = portrait
-fullscreen = 0
-android.permissions = INTERNET
-android.api = 30
-android.minapi = 21
-android.ndk = 25b
-android.sdk = 30
-log_level = 2
-
-[buildozer]
-android_sdk_dir = $HOME/android-sdk
-android_ndk_dir = $HOME/android-sdk/ndk/25.1.8937393
-' > buildozer.spec
         yes y | buildozer android debug
     - name: Upload APK
       uses: actions/upload-artifact@v4
